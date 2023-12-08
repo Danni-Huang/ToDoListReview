@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Todo web App";
+}
+
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        <h4>To Do:</h4>
+        <ul id="todoItemsList">
+
+        </ul>
+        <p id="todoItemsMsg"></p>
+    </div>
+      
+    <div class="col-sm-12 col-md-6">
+        <h4>Add a new item:</h4>
+        <form>
+            <div class="form-group">
+                <label for="taskDescription">Description:</label>
+                <input type="text" id="taskDescription" name="taskDescription" class="form-control"/>
+            </div>
+
+            <div class="form-group">
+                <label for="taskDueDate">DueDate:</label>
+                <input type="datetime" id="taskDueDate" name="taskDueDate" class="form-control"/>
+            </div>
+
+            <select id="taskCategory" name="taskCategory" class="form-control">
+                <option value="">please select a task category</option>
+
+                @* <option value="Home">Home</option>
+                <option value="Work">Work</option>
+                <option value="Shopping">Shopping</option> *@
+            </select>
+
+            <button type="button" id="addTaskBtn" class="btn btn-primary">Add task</button>
+
+        </form>
+        <p id="newTodoMsg"></p>
+    </div>
+</div>
+
+

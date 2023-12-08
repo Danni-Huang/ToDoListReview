@@ -1,0 +1,7 @@
+{
+    "taskId": 1,
+    "status": "Open",
+    "description": "Get milk",
+    "dueDate": "2023-10-05T00:00:00",
+    "category": "Work"
+}
