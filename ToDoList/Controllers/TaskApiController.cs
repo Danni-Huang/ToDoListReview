@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
 
@@ -20,8 +21,8 @@ namespace ToDoList.Controllers
                 Links = new Dictionary<string, Link>()
                 {
                     {"self", new Link() {Rel = "self", Href = GenerateFullUrl("/task-api")} },
-                    {"tasks", new Link() {Rel = "tasks", Href = GenerateFullUrl("/tasks")} },
-                    {"categories", new Link() {Rel = "categories", Href = GenerateFullUrl("/categories") } }
+                    {"tasks", new Link() {Rel = "tasks", Href = GenerateFullUrl("/api/tasks")} },
+                    {"categories", new Link() {Rel = "categories", Href = GenerateFullUrl("/api/categories") } }
                 },
                 Version = "1.0",
                 Creator = "Danni Huang"
@@ -29,7 +30,7 @@ namespace ToDoList.Controllers
             return Ok(viewModel);
         }
 
-        [HttpGet("/categories")]
+        [HttpGet("/api/categories")]
         public async Task<IActionResult> GetAllCategories()
         {
             List<string> categories = await _toDoContext.Categories
@@ -45,7 +46,8 @@ namespace ToDoList.Controllers
             return Ok(categories);
         }
 
-        [HttpGet("/tasks")]
+        [Authorize()]
+        [HttpGet("/api/tasks")]
         public async Task<IActionResult> GetAllTasks()
         {
             var categories = await _toDoContext.Categories.Select(c => c.Name).ToListAsync();
@@ -84,7 +86,8 @@ namespace ToDoList.Controllers
             return Ok(viewModel);
         }
 
-        [HttpGet("/tasks/{id}")]
+        [Authorize()]
+        [HttpGet("/api/tasks/{id}")]
         public async Task<IActionResult> GetTaskById(int id)
         {
             TaskInfo? tasks = await _toDoContext.ToDos
@@ -110,7 +113,8 @@ namespace ToDoList.Controllers
             return Ok(tasks);
         }
 
-        [HttpPost("/tasks")]
+        [Authorize()]
+        [HttpPost("/api/tasks")]
         public async Task<IActionResult> AddNewTask(NewTaskRequest newTaskRequest)
         {
             Category category = await _toDoContext.Categories.Where(c => c.Name == newTaskRequest.Category).FirstOrDefaultAsync();
@@ -126,7 +130,7 @@ namespace ToDoList.Controllers
             };
 
             _toDoContext.ToDos.Add(newTodo);
-            _toDoContext.SaveChangesAsync();
+            await _toDoContext.SaveChangesAsync();
 
             TaskInfo task = new TaskInfo()
             {

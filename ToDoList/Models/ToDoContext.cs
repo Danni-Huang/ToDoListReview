@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using ToDoList.Models.Configuration;
 
 namespace ToDoList.Models
 {
-    public class ToDoContext : DbContext
+    public class ToDoContext : IdentityDbContext<User>
     {
         public ToDoContext(DbContextOptions<ToDoContext> options)
             : base(options) { }
@@ -13,6 +15,8 @@ namespace ToDoList.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.Entity<Category>().HasData(
                 new Category { CategoryId = "work", Name = "Work" },
                 new Category { CategoryId = "home", Name = "Home" },

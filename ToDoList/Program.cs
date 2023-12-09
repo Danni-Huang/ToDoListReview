@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using ToDoList.Extension;
 using ToDoList.Models;
+using ToDoList.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +22,14 @@ builder.Services.AddCors(options => {
     });
 });
 
+builder.Services.ConfigureCors();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJwtAuthentication(builder.Configuration);
+
 builder.Services.AddDbContext<ToDoContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ToDoContext")));
+
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
@@ -39,7 +47,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseCors("AllowToDoClients");
+app.UseCors("TaskApiCorsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
