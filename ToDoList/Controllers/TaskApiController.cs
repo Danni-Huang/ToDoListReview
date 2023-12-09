@@ -22,7 +22,9 @@ namespace ToDoList.Controllers
                 {
                     {"self", new Link() {Rel = "self", Href = GenerateFullUrl("/task-api")} },
                     {"tasks", new Link() {Rel = "tasks", Href = GenerateFullUrl("/api/tasks")} },
-                    {"categories", new Link() {Rel = "categories", Href = GenerateFullUrl("/api/categories") } }
+                    {"categories", new Link() {Rel = "categories", Href = GenerateFullUrl("/api/categories") } },
+                    { "register", new Link() { Rel = "register", Href = GenerateFullUrl("/api/register"), Method = "POST" } },
+                    { "login", new Link() { Rel = "login", Href = GenerateFullUrl("/api/login"), Method = "POST" } },
                 },
                 Version = "1.0",
                 Creator = "Danni Huang"
@@ -81,7 +83,7 @@ namespace ToDoList.Controllers
                 TaskCategories = categories
             };
 
-            Response.Headers.LastModified = tasksLastModified?.ToUniversalTime().ToString("R");    
+            Response.Headers.LastModified = tasksLastModified?.ToUniversalTime().ToString("R");
 
             return Ok(viewModel);
         }
